@@ -7,13 +7,10 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Point
-import android.net.Uri
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Parcelable
 import android.provider.MediaStore
-import android.provider.Settings
 import android.text.TextUtils
 import android.util.Log
 import android.view.*
@@ -154,7 +151,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     //在这里获取到多码结果
-    fun handleSdkData(hmsScans: Array<HmsScan?>?) {
+    fun handleSdkData(hmsScans: Array<HmsScan?>) {
         hmsScans?.let {
             if (hmsScans.isNotEmpty()) {
                 if (hmsScans.size == 1) {
@@ -180,10 +177,11 @@ class MainActivity : AppCompatActivity() {
                         hmsScans[0]!!.getOriginalValue()
                     )
                 ) {
-                    val intent = Intent()
-                    intent.putExtra(SCAN_RESULT, hmsScans.toTypedArray())
-                    setResult(RESULT_OK, intent)
+//                    val intent = Intent()
+//                    intent.putExtra(SCAN_RESULT, hmsScans.toTypedArray())
+//                    setResult(RESULT_OK, intent)
 //                    finish()
+                    handleSdkData(hmsScans.toTypedArray())
                 }
             }.addOnFailureListener { e -> Log.w(TAG, e) }
         } else if (m == MULTIPROCESSOR_SYN_CODE) {

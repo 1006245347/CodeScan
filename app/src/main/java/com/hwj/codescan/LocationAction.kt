@@ -16,7 +16,7 @@ object LocationAction {
     fun checkMapAppExist(context: Context): Boolean {
         var packageInfo: PackageInfo? = null
         try {
-            packageInfo = context.getPackageManager().getPackageInfo(GAODE_PKG, 0)
+            packageInfo = context.packageManager.getPackageInfo(GAODE_PKG, 0)
         } catch (e: Exception) {
             Log.w(TAG, e)
         }

@@ -1,7 +1,5 @@
 package com.hwj.codescan;
 
-import static android.app.Activity.RESULT_OK;
-
 import static com.hwj.codescan.LogUtilsKt.printD;
 
 import android.app.Activity;
