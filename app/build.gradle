@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-//    id 'com.huawei.agconnect'
+    id 'com.huawei.agconnect'
 }
 
 android {
@@ -16,6 +16,11 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        resConfigs "en", "zh-rCN" //需要支持的语种
+        multiDexEnabled true
+        ndk {
+            abiFilters "armeabi", "armeabi-v7a"
+        }
     }
 
     buildTypes {
@@ -28,10 +33,16 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
+        checkReleaseBuilds false
+        abortOnError false
+    }
 }
 
 dependencies {
-
+    implementation fileTree(dir: 'libs', include: ['*.aar'])
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.android.material:material:1.7.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
@@ -41,7 +52,16 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
 
+    //统一扫码
     implementation 'com.huawei.hms:scanplus:2.9.0.300'
 
+    //权限
     implementation 'com.guolindev.permissionx:permissionx:1.7.1'
+    //搜索服务 中国大陆不支持
+    implementation 'com.huawei.hms:searchkit:5.0.4.303'
+    //机器学习  文本识别
+    implementation 'com.huawei.hms:ml-computer-vision-ocr:3.8.0.303'
+    implementation "com.huawei.hms:ml-computer-vision-ocr-cn-model:3.8.0.303"
+
+    implementation 'androidx.multidex:multidex:2.0.1'
 }
