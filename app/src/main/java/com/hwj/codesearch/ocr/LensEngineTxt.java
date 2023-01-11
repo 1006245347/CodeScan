@@ -5,7 +5,6 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.res.Configuration;
 import android.graphics.ImageFormat;
-import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.util.Log;
 
@@ -19,7 +18,7 @@ import java.nio.ByteBuffer;
 import java.util.IdentityHashMap;
 import java.util.Map;
 
-public class LensEngine {
+public class LensEngineTxt {
     private static final String TAG = "LensEngine";
     protected Activity activity;
     private Camera camera;
@@ -31,7 +30,7 @@ public class LensEngine {
     private final Map<byte[], ByteBuffer> bytesToByteBuffer = new IdentityHashMap<>();
     private GraphicOverlay overlay;
 
-    public LensEngine(Activity activity, CameraConfiguration configuration, GraphicOverlay graphicOverlay) {
+    public LensEngineTxt(Activity activity, CameraConfiguration configuration, GraphicOverlay graphicOverlay) {
         this.activity = activity;
         this.transactingRunnable = new FrameTransactingRunnable();
         this.selector = new CameraSelector(activity, configuration);
@@ -60,7 +59,7 @@ public class LensEngine {
      */
     @SuppressLint("MissingPermission")
     @RequiresPermission(Manifest.permission.CAMERA)
-    public synchronized LensEngine run() throws IOException {
+    public synchronized LensEngineTxt run() throws IOException {
         if (this.camera != null) {
             return this;
         }
@@ -129,7 +128,7 @@ public class LensEngine {
             try {
                 this.transactingThread.join();
             } catch (InterruptedException e) {
-                Log.d(LensEngine.TAG, "Frame transacting thread interrupted on release.");
+                Log.d(LensEngineTxt.TAG, "Frame transacting thread interrupted on release.");
             }
             this.transactingThread = null;
         }
@@ -139,7 +138,7 @@ public class LensEngine {
             try {
                 this.camera.setPreviewDisplay(null);
             } catch (Exception e) {
-                Log.e(LensEngine.TAG, "Failed to clear camera preview: " + e);
+                Log.e(LensEngineTxt.TAG, "Failed to clear camera preview: " + e);
             }
             this.camera.release();
             this.camera = null;
@@ -182,7 +181,7 @@ public class LensEngine {
     private class CameraPreviewCallback implements Camera.PreviewCallback {
         @Override
         public void onPreviewFrame(byte[] data, Camera camera) {
-            LensEngine.this.transactingRunnable.setNextFrame(data, camera);
+            LensEngineTxt.this.transactingRunnable.setNextFrame(data, camera);
         }
     }
 
@@ -212,7 +211,7 @@ public class LensEngine {
         @SuppressLint("Assert")
         void release() {
             synchronized (this.lock) {
-                assert (LensEngine.this.transactingThread.getState() == State.TERMINATED);
+                assert (LensEngineTxt.this.transactingThread.getState() == State.TERMINATED);
             }
         }
 
@@ -232,12 +231,12 @@ public class LensEngine {
                     camera.addCallbackBuffer(this.pendingFrameData.array());
                     this.pendingFrameData = null;
                 }
-                if (!LensEngine.this.bytesToByteBuffer.containsKey(data)) {
-                    Log.d(LensEngine.TAG, "Skipping frame. Could not find ByteBuffer associated with the image "
+                if (!LensEngineTxt.this.bytesToByteBuffer.containsKey(data)) {
+                    Log.d(LensEngineTxt.TAG, "Skipping frame. Could not find ByteBuffer associated with the image "
                             + "data from the camera.");
                     return;
                 }
-                this.pendingFrameData = LensEngine.this.bytesToByteBuffer.get(data);
+                this.pendingFrameData = LensEngineTxt.this.bytesToByteBuffer.get(data);
                 this.lock.notifyAll();
             }
         }
@@ -255,7 +254,7 @@ public class LensEngine {
                             // Waiting for next frame.
                             this.lock.wait();
                         } catch (InterruptedException e) {
-                            Log.w(LensEngine.TAG, "Frame transacting loop terminated.", e);
+                            Log.w(LensEngineTxt.TAG, "Frame transacting loop terminated.", e);
                             return;
                         }
                     }
@@ -267,23 +266,23 @@ public class LensEngine {
                     this.pendingFrameData = null;
                 }
                 try {
-                    synchronized (LensEngine.this.transactorLock) {
-                        Log.d(LensEngine.TAG, "Process an image");
-                        LensEngine.this.frameTransactor.process(
+                    synchronized (LensEngineTxt.this.transactorLock) {
+                        Log.d(LensEngineTxt.TAG, "Process an image");
+                        LensEngineTxt.this.frameTransactor.process(
                                 data,
                                 new FrameMetadata.Builder()
-                                        .setWidth(LensEngine.this.selector.getPreviewSize().getWidth())
-                                        .setHeight(LensEngine.this.selector.getPreviewSize().getHeight())
-                                        .setRotation(LensEngine.this.selector.getRotation())
-                                        .setCameraFacing(LensEngine.this.selector.getFacing())
+                                        .setWidth(LensEngineTxt.this.selector.getPreviewSize().getWidth())
+                                        .setHeight(LensEngineTxt.this.selector.getPreviewSize().getHeight())
+                                        .setRotation(LensEngineTxt.this.selector.getRotation())
+                                        .setCameraFacing(LensEngineTxt.this.selector.getFacing())
                                         .build(),
-                                LensEngine.this.overlay
+                                LensEngineTxt.this.overlay
                         );
                     }
                 } catch (Throwable t) {
-                    Log.e(LensEngine.TAG, "Exception thrown from receiver.", t);
+                    Log.e(LensEngineTxt.TAG, "Exception thrown from receiver.", t);
                 } finally {
-                    LensEngine.this.camera.addCallbackBuffer(data.array());
+                    LensEngineTxt.this.camera.addCallbackBuffer(data.array());
                 }
             }
         }

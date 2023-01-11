@@ -10,7 +10,7 @@ android {
 
     defaultConfig {
         applicationId "com.hwj.codescan"
-        minSdk 24
+        minSdk 24  //注意测试机的sdk
         targetSdk 33
         versionCode 1
         versionName "1.0"

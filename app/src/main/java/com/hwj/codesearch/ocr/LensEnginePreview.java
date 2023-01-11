@@ -27,7 +27,7 @@ public class LensEnginePreview extends ViewGroup {
 
     private boolean startRequested;
 
-    private LensEngine lensEngine;
+    private LensEngineTxt lensEngine;
 
     private float oldDist = 1f;
 
@@ -49,7 +49,7 @@ public class LensEnginePreview extends ViewGroup {
         return this.surfaceView.getHolder();
     }
 
-    public void start(LensEngine lensEngine, boolean isSynchronous) throws IOException {
+    public void start(LensEngineTxt lensEngine, boolean isSynchronous) throws IOException {
         this.isSynchronous = isSynchronous;
         if (lensEngine == null) {
             this.stop();

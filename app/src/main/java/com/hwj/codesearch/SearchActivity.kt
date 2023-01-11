@@ -81,7 +81,7 @@ class SearchActivity : AppCompatActivity() {
     }
 
     private var mHandler = MsgHandler(this)
-    private var lensEngineTxt: com.hwj.codesearch.ocr.LensEngine? = null
+    private var lensEngineTxt: com.hwj.codesearch.ocr.LensEngineTxt? = null
     private var preview: LensEnginePreview? = null
     private var graphicOverlay: GraphicOverlay? = null
     private var cameraConfiguration: CameraConfiguration? = null
@@ -111,7 +111,7 @@ class SearchActivity : AppCompatActivity() {
 
     private fun createLensEngineTxt() {
         if (null == lensEngineTxt) {
-            lensEngineTxt = LensEngine(this, cameraConfiguration, graphicOverlay)
+            lensEngineTxt = LensEngineTxt(this, cameraConfiguration, graphicOverlay)
         }
         try {
             localTextTransactor = LocalTextTransactor(mHandler, this)
